@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semakan ID Delima - SK Kuala Muput</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #27ae60;
+            --header-bg: linear-gradient(135deg, #3498db, #2ecc71);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .logo-container {
+            position: absolute;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .header-content {
+            flex: 1;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input[type="text"], select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .result-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: none;
+            border: 1px solid #e0e0e0;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--light-color);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        .result-item {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            width: 150px;
+            flex-shrink: 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--dark-color), #2c3e50);
+            color: white;
+            border-radius: 0 0 10px 10px;
+            font-size: 14px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .footer-info {
+            margin-bottom: 12px;
+        }
+        
+        .system-uptime {
+            font-style: italic;
+            color: #bdc3c7;
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+            text-align: center;
+            padding: 10px;
+            background-color: #fde8e8;
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .search-hint {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .school-name {
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="https://i.postimg.cc/fLF8Qqnw/LOGO-SKKM-2023-LATEST.png" alt="Logo SK Kuala Muput" class="logo">
+            </div>
+            <div class="header-content">
+                <h1>PORTAL SEMAKAN ID DELIMA</h1>
+                <div class="school-name">Sekolah Kebangsaan Kuala Muput</div>
+            </div>
+        </header>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <label for="nama">Nama Murid:</label>
+                <input type="text" id="nama" placeholder="Masukkan nama penuh atau sebahagian nama">
+                <div class="search-hint">Contoh: Untuk 'Siti Nurhaliza', boleh cari dengan 'siti' atau 'nurhaliza'</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="kelas">Tahun/Kelas:</label>
+                <select id="kelas">
+                    <option value="">-- Sila pilih tahun --</option>
+                    <option value="1">Tahun 1</option>
+                    <option value="2">Tahun 2</option>
+                    <option value="3">Tahun 3</option>
+                    <option value="4">Tahun 4</option>
+                    <option value="5">Tahun 5</option>
+                    <option value="6">Tahun 6</option>
+                </select>
+            </div>
+            
+            <button id="semak">SEMAK ID DELIMA</button>
+            
+            <div id="error-message" class="error-message">
+                Maaf, maklumat tidak dijumpai. Sila pastikan nama dan tahun yang dimasukkan adalah betul.
+            </div>
+        </div>
+        
+        <div id="result-container" class="result-container">
+            <h2 class="result-title">MAKLUMAT ID DELIMA</h2>
+            
+            <div class="result-item">
+                <span class="result-label">Nama Murid:</span>
+                <span id="result-nama" style="font-weight: 500;"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Tahun/Kelas:</span>
+                <span id="result-kelas" style="color: var(--secondary-color); font-weight: 600;"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">ID Delima:</span>
+                <span id="result-id" style="font-weight: 600; color: var(--primary-color);"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Kata Laluan:</span>
+                <span id="result-password" style="font-weight: 600; color: var(--accent-color);"></span>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-info">
+                Semakan ID Delima Murid SK Kuala Muput © 2025
+            </div>
+            <div class="footer-info">
+                Inovasi Digital oleh: Cikgu Dayangku Nurul Akmal Awang Mustapha
+            </div>
+            <div class="footer-info">
+                Dibangunkan pada: 12 Julai 2025
+            </div>
+            <div class="system-uptime">
+                Sistem beroperasi selama: <span id="uptime"></span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Data ID Delima
+        const data = {
+            "1": [
+                { nama: "Andrewson Bakak Anak Atum", id: "m-251302630801@moe-dl.edu.my", password: "BigoAtum" },
+                { nama: "Alexius Beti Anak Rashid", id: "m-251302308026@moe-dl.edu.my", password: "AlexiusBeti" },
+                { nama: "Carlissa Tening Anyie", id: "m-241302257373@moe-dl.edu.my", password: "CarlissaTening" },
+                { nama: "Dorish Eva Anak Henry", id: "m-251302311588@moe-dl.edu.my", password: "DorishEva" },
+                { nama: "Esekeil Memay Anak Eddy", id: "m-241302236231@moe-dl.edu.my", password: "MemayEddy" },
+                { nama: "Feluscatiana Lanja Anak George", id: "m-231303005505@moe-dl.edu.my", password: "LanjaGeorge" },
+                { nama: "Harold Ngumbang Anak Baptista Awang", id: "m-231301011762@moe-dl.edu.my", password: "HaroldNgumbang" },
+                { nama: "Jessie Mensi Anak Inuk", id: "m-231303026682@moe-dl.edu.my", password: "JessieMensi" },
+                { nama: "Patriana Julan Anak Dunggau", id: "m-251302311738@moe-dl.edu.my", password: "JulanDunggau" },
+                { nama: "Wilixander Radin Anak Asroy", id: "m-231303008350@moe-dl.edu.my", password: "RadinAsroy" },
+                { nama: "Cornelius Xavier Tinggi Anak Ellis", id: "m-251302308038@moe-dl.edu.my", password: "XavierTinggi" }
+            ],
+            "2": [
+                { nama: "Angelina Ana Anak Bakil", id: "m-15370928@moe-dl.edu.my", password: "Ana@12Lina" },
+                { nama: "Ariel Jonas Anak Gurum", id: "m-15370930@moe-dl.edu.my", password: "ArielJ951" },
+                { nama: "Dennis Gindar Anak Steven", id: "m-15370931@moe-dl.edu.my", password: "DeN37@iS" },
+                { nama: "Donald Banyah Anak Henry", id: "m-15370933@moe-dl.edu.my", password: "Banyah933" },
+                { nama: "Haleyson Lukas Anak Diana", id: "m-15605141@moe-dl.edu.my", password: "Lukas@Diana141" },
+                { nama: "Jennifer Mus Anak Engkit", id: "m-15370934@moe-dl.edu.my", password: "JenAlus934" },
+                { nama: "Sylvester Nantang Anak Umpur", id: "m-15370935@moe-dl.edu.my", password: "Nantang463" },
+                { nama: "Marilyn Chundang Anak Berenai", id: "m-15614647@moe-dl.edu.my", password: "MarilynChundang" }
+            ],
+            "3": [
+                { nama: "Aerilyn Paula Anak Jubin", id: "m-14752480@moe-dl.edu.my", password: "Paula2480" },
+                { nama: "Cynthia Belenyun Anak Gelau", id: "m-15147834@moe-dl.edu.my", password: "Belenyun4466" },
+                { nama: "Fredo Riveria Anak Ayong", id: "m-15186921@moe-dl.edu.my", password: "Fredo867314" },
+                { nama: "Nathaniel Gemma Anak Mendut", id: "m-15147835@moe-dl.edu.my", password: "Gemma92864" },
+                { nama: "Nelson Nuel Anak Barat", id: "m-15147836@moe-dl.edu.my", password: "NelsonNue198" },
+                { nama: "Stanlyson Beringau Anak Unang", id: "m-15147837@moe-dl.edu.my", password: "Stanlyson9114" },
+                { nama: "Steven Kanang Anak Charlie", id: "m-15147838@moe-dl.edu.my", password: "Ibinkanang838" },
+                { nama: "Wilidilous Embi Anak Asroy", id: "m-15111853@moe-dl.edu.my", password: "EmbiAsroy8845" },
+                { nama: "Zackharry Anak Juliana", id: "m-15147839@moe-dl.edu.my", password: "Zacharry8976" }
+            ],
+            "4": [
+                { nama: "Allister Luke Anak Nuing", id: "m-14544924@moe-dl.edu.my", password: "Nu87inG98" },
+                { nama: "Dylantio Melvin Diana", id: "m-14195493@moe-dl.edu.my", password: "Dylantio4345" },
+                { nama: "Emily Layap Anak Bonni", id: "m-14544926@moe-dl.edu.my", password: "Layap4492" },
+                { nama: "Frederick Darren Anak Roland", id: "m-14544927@moe-dl.edu.my", password: "Darren99654" },
+                { nama: "Jonathan Taja Anak Wilfred Ngebong", id: "m-14544928@moe-dl.edu.my", password: "Jonathan@1122" },
+                { nama: "Perdiles Maxon Graman Anak Patric", id: "m-14544929@moe-dl.edu.my", password: "Bayau8632" }
+            ],
+            "5": [
+                { nama: "Bemedict Cammiltuz Anak Breaky Cliff", id: "m-13879663@moe-dl.edu.my", password: "Benedict2124" },
+                { nama: "Celastian Kelimin Anak Unang", id: "m-13879665@moe-dl.edu.my", password: "Kelimin8828" },
+                { nama: "Chriscyerli Clayrez Anak Richard", id: "m-13879907@moe-dl.edu.my", password: "Clayrez7797" },
+                { nama: "Dickson Dian Anak Sonia Pereny", id: "m-15202395@moe-dl.edu.my", password: "DicksonDian86" },
+                { nama: "Favios Favien Jebi Anak Chemong", id: "m-13879908@moe-dl.edu.my", password: "Favios4869" },
+                { nama: "Greyson Gamith Anak Bakar", id: "m-13879909@moe-dl.edu.my", password: "Gamith2474" },
+                { nama: "Kennady Gelau Anak Robica Seluai", id: "m-13879911@moe-dl.edu.my", password: "Kennady6648" },
+                { nama: "Max Richo Anak Eddy", id: "m-13879912@moe-dl.edu.my", password: "MaxRicho9862" },
+                { nama: "Necqueline Jelyni Menzy Anak Gindi", id: "m-13879913@moe-dl.edu.my", password: "Menzy97214" },
+                { nama: "Syasha Sahfina Anak Samilla", id: "m-12905727@moe-dl.edu.my", password: "SahfinaSyasha61" },
+                { nama: "Theo Jayden Anak Tutong", id: "m-13879916@moe-dl.edu.my", password: "Jayden9916" },
+                { nama: "Zactian Menaus Anak Linggie", id: "m-13879920@moe-dl.edu.my", password: "Zactian469784" }
+            ],
+            "6": [
+                { nama: "Alexson Aaron Anak Aming", id: "m-13533646@moe-dl.edu.my", password: "AaronAming3646" },
+                { nama: "Alice Bia Anak Tading", id: "m-13515000@moe-dl.edu.my", password: "AliceBia5153" },
+                { nama: "Alisya Anak Steven", id: "m-13515001@moe-dl.edu.my", password: "AlisyaSteven2423" },
+                { nama: "Bibiana Ngayan Anak Engkit", id: "m-13533650@moe-dl.edu.my", password: "Bibiana9734" },
+                { nama: "Christopher Gan Anak Geroge", id: "m-13515002@moe-dl.edu.my", password: "Gan995546" },
+                { nama: "Clarissa Serni Anak Roland", id: "m-13515003@moe-dl.edu.my", password: "Clarissa498876" },
+                { nama: "Cornelius Malang Anak Bong", id: "m-13515025@moe-dl.edu.my", password: "Malang1925" },
+                { nama: "Davidson Angut Anak Narok", id: "m-13515026@moe-dl.edu.my", password: "Angut489643" },
+                { nama: "Emylia Lasi Anak Bonni", id: "m-13545397@moe-dl.edu.my", password: "Emylial_asip735" },
+                { nama: "Felix Elvisson Janting Anak Luin", id: "m-13453783@moe-dl.edu.my", password: "FelixLuin" },
+                { nama: "Jassy Ramin Anak Ricky", id: "m-13218525@moe-dl.edu.my", password: "JassyRamin5358" },
+                { nama: "Wilfred Kudi Anak Asroy", id: "m-13344809@moe-dl.edu.my", password: "Kudi984433" },
+                { nama: "Wilson Empau Anak Chemong", id: "m-13515029@moe-dl.edu.my", password: "Empau515329" }
+            ]
+        };
+
+        // Fungsi untuk menghitung uptime sistem
+        function updateUptime() {
+            const startDate = new Date("2025-07-12T00:00:00");
+            const now = new Date();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById("uptime").textContent = 
+                `${days} hari, ${Math.floor(hours)} jam, ${minutes} minit, ${seconds} saat`;
+        }
+        
+        // Update uptime setiap detik
+        setInterval(updateUptime, 1000);
+        updateUptime(); // Panggil pertama kali
+        
+        // Fungsi untuk menangani klik tombol semak
+        document.getElementById("semak").addEventListener("click", function() {
+            const nama = document.getElementById("nama").value.trim();
+            const kelas = document.getElementById("kelas").value;
+            const errorMessage = document.getElementById("error-message");
+            const resultContainer = document.getElementById("result-container");
+            
+            // Sembunyikan pesan error dan hasil sebelumnya
+            errorMessage.style.display = "none";
+            resultContainer.style.display = "none";
+            
+            // Validasi input
+            if (!nama || !kelas) {
+                errorMessage.textContent = "Sila masukkan nama dan pilih tahun kelas.";
+                errorMessage.style.display = "block";
+                return;
+            }
+            
+            // Cari data yang sesuai
+            const kelasData = data[kelas];
+            const searchTerm = nama.toLowerCase();
+            
+            // Cari nama yang mengandungi kata kunci carian
+            const found = kelasData.find(item => 
+                item.nama.toLowerCase().includes(searchTerm));
+            
+            if (found) {
+                // Tampilkan hasil
+                document.getElementById("result-nama").textContent = found.nama;
+                document.getElementById("result-kelas").textContent = "Tahun " + kelas;
+                document.getElementById("result-id").textContent = found.id;
+                document.getElementById("result-password").textContent = found.password;
+                resultContainer.style.display = "block";
+            } else {
+                // Tampilkan pesan error
+                errorMessage.textContent = "Maaf, maklumat tidak dijumpai. Sila pastikan nama dan tahun yang dimasukkan adalah betul.";
+                errorMessage.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
