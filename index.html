@@ -3,433 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semakan ID Delima - SK Kuala Muput</title>
+    <title>Sistem ID Delima - SK Kuala Muput</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
-            --success-color: #27ae60;
-            --header-bg: linear-gradient(135deg, #3498db, #2ecc71);
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #dc2626 100%);
         }
+        .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--dark-color);
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+        #id-card-template {
+            width: 500px; height: 300px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white; padding: 25px; border-radius: 15px;
+            position: absolute; left: -9999px;
         }
+        .match-item:hover { background-color: #fff1f2; cursor: pointer; color: #e11d48; }
         
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: var(--header-bg);
-            color: white;
-            padding: 15px 0;
-            text-align: center;
-            border-radius: 10px 10px 0 0;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .logo-container {
-            position: absolute;
-            left: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-container-right {
-            position: absolute;
-            right: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo {
-            height: 60px;
-            width: auto;
-            margin-right: 10px;
-        }
-        
-        .header-content {
-            flex: 1;
-        }
-        
-        h1 {
-            margin: 0;
-            font-size: 28px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-        }
-        
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-        
-        input[type="text"], select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background-color: #f8f9fa;
-        }
-        
-        input[type="text"]:focus, select:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            background-color: white;
-        }
-        
-        button {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            width: 100%;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-        }
-        
-        .result-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: none;
-            border: 1px solid #e0e0e0;
-            animation: fadeIn 0.5s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .result-title {
-            color: var(--primary-color);
-            margin-top: 0;
-            border-bottom: 2px solid var(--light-color);
-            padding-bottom: 10px;
-            font-size: 22px;
-        }
-        
-        .result-item {
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .result-label {
-            font-weight: 600;
-            color: var(--dark-color);
-            width: 150px;
-            flex-shrink: 0;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: linear-gradient(135deg, var(--dark-color), #2c3e50);
-            color: white;
-            border-radius: 0 0 10px 10px;
-            font-size: 14px;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .footer-info {
-            margin-bottom: 12px;
-        }
-        
-        .system-uptime {
-            font-style: italic;
-            color: #bdc3c7;
-        }
-        
-        .error-message {
-            color: var(--accent-color);
-            margin-top: 15px;
-            font-weight: 600;
-            display: none;
-            text-align: center;
-            padding: 10px;
-            background-color: #fde8e8;
-            border-radius: 5px;
-            border-left: 4px solid var(--accent-color);
-        }
-        
-        .search-hint {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-top: 8px;
-            font-style: italic;
-        }
-        
-        .school-name {
-            font-size: 18px;
-            margin-top: 5px;
-            font-weight: 500;
-        }
+        /* Modal Style */
+        #adminModal { display: none; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo-container">
-                <img src="https://i.postimg.cc/fLF8Qqnw/LOGO-SKKM-2023-LATEST.png" alt="Logo SK Kuala Muput" class="logo">
+<body class="min-h-screen text-slate-800 pb-12">
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="glass rounded-3xl p-6 mb-8 card-shadow flex flex-col md:flex-row items-center justify-between border-b-4 border-rose-600 relative overflow-hidden">
+            <img src="https://i.postimg.cc/fLF8Qqnw/LOGO-SKKM-2023-LATEST.png" class="h-20 mb-4 md:mb-0 z-10" alt="Logo SKKM">
+            
+            <div class="text-center z-10">
+                <h1 class="text-2xl font-black text-rose-900 tracking-tighter uppercase leading-tight">Portal ID Delima</h1>
+                <p class="text-rose-600 font-extrabold text-lg tracking-tight uppercase">SK Kuala Muput, Tatau</p>
+                <p class="text-slate-500 font-bold italic text-[10px] mt-1 tracking-widest uppercase">Transformasi Sekolah 2025 (TS25)</p>
             </div>
-            <div class="header-content">
-                <h1>PORTAL SEMAKAN ID DELIMA</h1>
-                <div class="school-name">Sekolah Kebangsaan Kuala Muput</div>
-            </div>
-            <div class="logo-container-right">
-                <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" alt="Logo TS25" class="logo" style="margin-right: 0;">
+
+            <div class="flex items-center gap-4 z-10">
+                <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-16" alt="Logo TS25">
+                <!-- Button Admin -->
+                <button onclick="openAdminModal()" class="bg-rose-100 hover:bg-rose-200 p-3 rounded-full text-rose-600 transition-all shadow-inner" title="Panel Admin">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </button>
             </div>
         </header>
-        
-        <div class="form-container">
-            <div class="form-group">
-                <label for="nama">Nama Murid:</label>
-                <input type="text" id="nama" placeholder="Masukkan nama penuh atau sebahagian nama">
-                <div class="search-hint">Contoh: Untuk 'Siti Nurhaliza', boleh cari dengan 'siti' atau 'nurhaliza'</div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <!-- Form Semakan -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="glass p-6 rounded-3xl card-shadow border border-white/20">
+                    <h2 class="text-lg font-black text-rose-800 mb-4 flex items-center gap-2 border-b border-rose-100 pb-2">
+                        <span>🔍</span> CARIAN PINTAR
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Nama Murid (Cth: Siti / Andrew):</label>
+                            <input type="text" id="searchNama" placeholder="MASUKKAN NAMA..." class="w-full p-4 bg-white border-2 border-rose-50 rounded-2xl focus:ring-4 focus:ring-rose-200 focus:outline-none transition-all font-bold uppercase text-sm shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Tahun / Kelas:</label>
+                            <select id="searchKelas" class="w-full p-4 bg-white border-2 border-rose-50 rounded-2xl focus:ring-4 focus:ring-rose-200 focus:outline-none transition-all font-bold text-sm shadow-sm">
+                                <option value="">-- SILA PILIH --</option>
+                                <option value="1">Tahun 1</option>
+                                <option value="2">Tahun 2</option>
+                                <option value="3">Tahun 3</option>
+                                <option value="4">Tahun 4</option>
+                                <option value="5">Tahun 5</option>
+                                <option value="6">Tahun 6</option>
+                            </select>
+                        </div>
+                        <button onclick="cariMurid()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">Cari Murid</button>
+                    </div>
+
+                    <!-- Senarai Nama Dijumpai -->
+                    <div id="matchContainer" class="hidden mt-6 animate-bounce">
+                        <p class="text-[10px] font-black text-rose-500 mb-2 uppercase tracking-widest text-center">Pilih nama di bawah:</p>
+                        <div id="matchList" class="border-2 border-rose-100 rounded-2xl overflow-hidden divide-y divide-rose-50 bg-white text-sm font-bold shadow-xl">
+                            <!-- Nama akan muncul di sini -->
+                        </div>
+                    </div>
+
+                    <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic tracking-tighter">Checking Data Connection...</div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="kelas">Tahun/Kelas:</label>
-                <select id="kelas">
-                    <option value="">-- Sila pilih tahun --</option>
-                    <option value="1">Tahun 1</option>
-                    <option value="2">Tahun 2</option>
-                    <option value="3">Tahun 3</option>
-                    <option value="4">Tahun 4</option>
-                    <option value="5">Tahun 5</option>
-                    <option value="6">Tahun 6</option>
-                </select>
-            </div>
-            
-            <button id="semak">SEMAK ID DELIMA</button>
-            
-            <div id="error-message" class="error-message">
-                Maaf, maklumat tidak dijumpai. Sila pastikan nama dan tahun yang dimasukkan adalah betul.
+
+            <!-- Area Keputusan -->
+            <div id="resultArea" class="lg:col-span-3 hidden">
+                <div class="glass p-6 rounded-3xl card-shadow border-l-[12px] border-rose-500 h-full">
+                    <h2 class="text-xl font-black text-rose-800 mb-6 flex items-center gap-2 uppercase tracking-tight">
+                        <span>📄</span> Maklumat Murid
+                    </h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-white/50 p-4 rounded-2xl border border-rose-100 shadow-sm">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Penuh</p>
+                            <p id="resNama" class="text-lg font-black text-rose-900 uppercase leading-tight">-</p>
+                        </div>
+                        <div class="bg-white/50 p-4 rounded-2xl border border-rose-100 shadow-sm">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Kelas / Tahun</p>
+                            <p id="resKelas" class="font-black text-pink-600 text-lg uppercase">-</p>
+                        </div>
+                        <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 shadow-sm">
+                            <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest">ID Delima (Email)</p>
+                            <p id="resEmail" class="font-mono text-sm font-black text-rose-900 break-all">-</p>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-2xl shadow-xl">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Kata Laluan</p>
+                            <p id="resPass" class="font-mono text-xl font-black text-yellow-400 tracking-wider">-</p>
+                        </div>
+                    </div>
+                    <button onclick="downloadIDCard()" class="mt-8 w-full bg-slate-800 hover:bg-black text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 uppercase tracking-widest">
+                        <span>💾</span> Simpan Kad ID (PNG)
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div id="result-container" class="result-container">
-            <h2 class="result-title">MAKLUMAT ID DELIMA</h2>
-            
-            <div class="result-item">
-                <span class="result-label">Nama Murid:</span>
-                <span id="result-nama" style="font-weight: 500;"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Tahun/Kelas:</span>
-                <span id="result-kelas" style="color: var(--secondary-color); font-weight: 600;"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">ID Delima:</span>
-                <span id="result-id" style="font-weight: 600; color: var(--primary-color);"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Kata Laluan:</span>
-                <span id="result-password" style="font-weight: 600; color: var(--accent-color);"></span>
+
+        <!-- Admin Login Modal -->
+        <div id="adminModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="glass p-8 rounded-3xl card-shadow max-w-sm w-full border-t-8 border-rose-600">
+                <h3 class="text-xl font-black text-rose-900 mb-4 uppercase text-center">Panel Admin</h3>
+                <div class="space-y-4">
+                    <input type="text" id="adminUser" placeholder="Username" class="w-full p-4 bg-white border-2 border-rose-100 rounded-xl focus:outline-none font-bold">
+                    <input type="password" id="adminPass" placeholder="Password" class="w-full p-4 bg-white border-2 border-rose-100 rounded-xl focus:outline-none font-bold">
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="closeAdminModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 font-bold py-3 rounded-xl uppercase">Batal</button>
+                        <button onclick="loginAdmin()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl uppercase shadow-lg">Masuk</button>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <footer>
-            <div class="footer-info">
-                Semakan ID Delima Murid SK Kuala Muput © 2025
+
+        <!-- Footer -->
+        <footer class="mt-12 border-t border-white/20 pt-8 text-center space-y-4">
+            <div class="text-white text-sm font-black uppercase tracking-[0.2em] drop-shadow-md">
+                SK Kuala Muput © 2025
             </div>
-            <div class="footer-info">
-                Inovasi Digital oleh: Cikgu Dayangku Nurul Akmal Awang Mustapha
+            <div class="bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-md text-white text-[11px] font-bold border border-white/30 uppercase tracking-widest">
+                Inovasi: Cikgu Dayangku Nurul Akmal Awang Mustapha
             </div>
-            <div class="footer-info">
-                Dibangunkan pada: 12 Julai 2025
-            </div>
-            <div class="system-uptime">
-                Sistem beroperasi selama: <span id="uptime"></span>
+            <div class="text-rose-100 text-[10px] font-black italic tracking-widest uppercase">
+                Sistem beroperasi: <span id="uptime" class="text-white not-italic underline decoration-rose-400 underline-offset-4"></span>
             </div>
         </footer>
     </div>
 
-    <script>
-        // Data ID Delima
-        const data = {
-            "1": [
-                { nama: "Andrewson Bakak Anak Atum", id: "m-251302630801@moe-dl.edu.my", password: "BigoAtum" },
-                { nama: "Alexius Beti Anak Rashid", id: "m-251302308026@moe-dl.edu.my", password: "AlexiusBeti" },
-                { nama: "Carlissa Tening Anyie", id: "m-241302257373@moe-dl.edu.my", password: "CarlissaTening" },
-                { nama: "Dorish Eva Anak Henry", id: "m-251302311588@moe-dl.edu.my", password: "DorishEva" },
-                { nama: "Esekeil Memay Anak Eddy", id: "m-241302236231@moe-dl.edu.my", password: "MemayEddy" },
-                { nama: "Feluscatiana Lanja Anak George", id: "m-231303005505@moe-dl.edu.my", password: "LanjaGeorge" },
-                { nama: "Harold Ngumbang Anak Baptista Awang", id: "m-231301011762@moe-dl.edu.my", password: "HaroldNgumbang" },
-                { nama: "Jessie Mensi Anak Inuk", id: "m-231303026682@moe-dl.edu.my", password: "JessieMensi" },
-                { nama: "Patriana Julan Anak Dunggau", id: "m-251302311738@moe-dl.edu.my", password: "JulanDunggau" },
-                { nama: "Wilixander Radin Anak Asroy", id: "m-231303008350@moe-dl.edu.my", password: "RadinAsroy" },
-                { nama: "Cornelius Xavier Tinggi Anak Ellis", id: "m-251302308038@moe-dl.edu.my", password: "XavierTinggi" }
-            ],
-            "2": [
-                { nama: "Angelina Ana Anak Bakil", id: "m-15370928@moe-dl.edu.my", password: "Ana@12Lina" },
-                { nama: "Ariel Jonas Anak Gurum", id: "m-15370930@moe-dl.edu.my", password: "ArielJ951" },
-                { nama: "Dennis Gindar Anak Steven", id: "m-15370931@moe-dl.edu.my", password: "DeN37@iS" },
-                { nama: "Donald Banyah Anak Henry", id: "m-15370933@moe-dl.edu.my", password: "Banyah933" },
-                { nama: "Haleyson Lukas Anak Diana", id: "m-15605141@moe-dl.edu.my", password: "Lukas@Diana141" },
-                { nama: "Jennifer Mus Anak Engkit", id: "m-15370934@moe-dl.edu.my", password: "JenAlus934" },
-                { nama: "Sylvester Nantang Anak Umpur", id: "m-15370935@moe-dl.edu.my", password: "Nantang463" },
-                { nama: "Marilyn Chundang Anak Berenai", id: "m-15614647@moe-dl.edu.my", password: "MarilynChundang" }
-            ],
-            "3": [
-                { nama: "Aerilyn Paula Anak Jubin", id: "m-14752480@moe-dl.edu.my", password: "Paula2480" },
-                { nama: "Cynthia Belenyun Anak Gelau", id: "m-15147834@moe-dl.edu.my", password: "Belenyun4466" },
-                { nama: "Fredo Riveria Anak Ayong", id: "m-15186921@moe-dl.edu.my", password: "Fredo867314" },
-                { nama: "Nathaniel Gemma Anak Mendut", id: "m-15147835@moe-dl.edu.my", password: "Gemma92864" },
-                { nama: "Nelson Nuel Anak Barat", id: "m-15147836@moe-dl.edu.my", password: "NelsonNue198" },
-                { nama: "Stanlyson Beringau Anak Unang", id: "m-15147837@moe-dl.edu.my", password: "Stanlyson9114" },
-                { nama: "Steven Kanang Anak Charlie", id: "m-15147838@moe-dl.edu.my", password: "Ibinkanang838" },
-                { nama: "Wilidilous Embi Anak Asroy", id: "m-15111853@moe-dl.edu.my", password: "EmbiAsroy8845" },
-                { nama: "Zackharry Anak Juliana", id: "m-15147839@moe-dl.edu.my", password: "Zacharry8976" }
-            ],
-            "4": [
-                { nama: "Allister Luke Anak Nuing", id: "m-14544924@moe-dl.edu.my", password: "Nu87inG98" },
-                { nama: "Dylantio Melvin Diana", id: "m-14195493@moe-dl.edu.my", password: "Dylantio4345" },
-                { nama: "Emily Layap Anak Bonni", id: "m-14544926@moe-dl.edu.my", password: "Layap4492" },
-                { nama: "Frederick Darren Anak Roland", id: "m-14544927@moe-dl.edu.my", password: "Darren99654" },
-                { nama: "Jonathan Taja Anak Wilfred Ngebong", id: "m-14544928@moe-dl.edu.my", password: "Jonathan@1122" },
-                { nama: "Perdiles Maxon Graman Anak Patric", id: "m-14544929@moe-dl.edu.my", password: "Bayau8632" }
-            ],
-            "5": [
-                { nama: "Benedict Cammiltuz Anak Breaky Cliff", id: "m-13879663@moe-dl.edu.my", password: "Benedict2124" },
-                { nama: "Celastian Kelimin Anak Unang", id: "m-13879665@moe-dl.edu.my", password: "Kelimin8828" },
-                { nama: "Chriscyerli Clayrez Anak Richard", id: "m-13879907@moe-dl.edu.my", password: "Clayrez7797" },
-                { nama: "Dickson Dian Anak Sonia Pereny", id: "m-15202395@moe-dl.edu.my", password: "DicksonDian86" },
-                { nama: "Favios Favien Jebi Anak Chemong", id: "m-13879908@moe-dl.edu.my", password: "Favios4869" },
-                { nama: "Greyson Gamith Anak Bakar", id: "m-13879909@moe-dl.edu.my", password: "Gamith2474" },
-                { nama: "Kennady Gelau Anak Robica Seluai", id: "m-13879911@moe-dl.edu.my", password: "Kennady6648" },
-                { nama: "Max Richo Anak Eddy", id: "m-13879912@moe-dl.edu.my", password: "MaxRicho9862" },
-                { nama: "Necqueline Jelyni Menzy Anak Gindi", id: "m-13879913@moe-dl.edu.my", password: "Menzy97214" },
-                { nama: "Syasha Sahfina Anak Samilla", id: "m-12905727@moe-dl.edu.my", password: "SahfinaSyasha61" },
-                { nama: "Theo Jayden Anak Tutong", id: "m-13879916@moe-dl.edu.my", password: "Jayden9916" },
-                { nama: "Zactian Menaus Anak Linggie", id: "m-13879920@moe-dl.edu.my", password: "Zactian469784" }
-            ],
-            "6": [
-                { nama: "Alexson Aaron Anak Aming", id: "m-13533646@moe-dl.edu.my", password: "AaronAming3646" },
-                { nama: "Alice Bia Anak Tading", id: "m-13515000@moe-dl.edu.my", password: "AliceBia5153" },
-                { nama: "Alisya Anak Steven", id: "m-13515001@moe-dl.edu.my", password: "AlisyaSteven2423" },
-                { nama: "Bibiana Ngayan Anak Engkit", id: "m-13533650@moe-dl.edu.my", password: "Bibiana9734" },
-                { nama: "Christopher Gan Anak Geroge", id: "m-13515002@moe-dl.edu.my", password: "Gan995546" },
-                { nama: "Clarissa Serni Anak Roland", id: "m-13515003@moe-dl.edu.my", password: "Clarissa498876" },
-                { nama: "Cornelius Malang Anak Bong", id: "m-13515025@moe-dl.edu.my", password: "Malang1925" },
-                { nama: "Davidson Angut Anak Narok", id: "m-13515026@moe-dl.edu.my", password: "Angut489643" },
-                { nama: "Emylia Lasi Anak Bonni", id: "m-13545397@moe-dl.edu.my", password: "EmyliaLasi9735" },
-                { nama: "Felix Elvisson Janting Anak Luin", id: "m-13453783@moe-dl.edu.my", password: "FelixLuin" },
-                { nama: "Jassy Ramin Anak Ricky", id: "m-13218525@moe-dl.edu.my", password: "JassyRamin5358" },
-                { nama: "Wilfred Kudi Anak Asroy", id: "m-13344809@moe-dl.edu.my", password: "Kudi984433" },
-                { nama: "Wilson Empau Anak Chemong", id: "m-13515029@moe-dl.edu.my", password: "Empau515329" }
-            ]
-        };
+    <!-- Template Kad (Ghaib) -->
+    <div id="id-card-template">
+        <div class="flex justify-between items-start border-b border-white/30 pb-4 mb-4">
+            <div><p class="text-[10px] font-bold tracking-widest uppercase opacity-80">Kad Akses Digital Murid</p>
+            <h2 class="text-xl font-black italic text-white tracking-tighter">SK KUALA MUPUT</h2></div>
+            <img src="https://i.postimg.cc/fLF8Qqnw/LOGO-SKKM-2023-LATEST.png" class="h-12">
+        </div>
+        <div class="space-y-4">
+            <div><p class="text-[10px] uppercase opacity-70 font-bold mb-1 tracking-widest font-black">Nama Penuh Murid:</p>
+            <p id="cardNama" class="text-lg font-bold tracking-wide uppercase leading-tight font-black">-</p></div>
+            <div class="flex justify-between gap-4">
+                <div class="flex-1 bg-white/10 p-3 rounded-lg border border-white/10">
+                    <p class="text-[9px] uppercase opacity-70 mb-1 font-bold">Email Delima:</p>
+                    <p id="cardEmail" class="font-mono text-[11px] font-bold break-all">-</p>
+                </div>
+                <div class="w-32 bg-white/10 p-3 rounded-lg border-l-4 border-yellow-400">
+                    <p class="text-[9px] uppercase opacity-70 mb-1 font-bold">Katalaluan:</p>
+                    <p id="cardPass" class="font-mono text-xs font-bold text-yellow-300">-</p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-4 left-6 right-6 flex justify-between items-center text-[9px] font-bold tracking-widest opacity-60 border-t border-white/20 pt-2">
+            <p>KELAS: <span id="cardTahun"></span> | SESI 2025/2026</p>
+            <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-7">
+        </div>
+    </div>
 
-        // Fungsi untuk menghitung uptime sistem
+    <script>
+        // --- KONFIGURASI DATA ---
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-GJIxduKS2_GeCDwAkeMEoa7S9q3D8BbZCOMeJ1cGz89f5jCSdXLAZJAzelbAd2EfhOmdz9K-0SHN/pub?output=csv';
+        const EDIT_URL = 'https://docs.google.com/spreadsheets/d/1vQ-GJIxduKS2_GeCDwAkeMEoa7S9q3D8BbZCOMeJ1cGz89f5jCSdXLAZJAzelbAd2EfhOmdz9K-0SHN/edit';
+
+        let muridData = [];
+
         function updateUptime() {
             const startDate = new Date("2025-07-12T00:00:00");
             const now = new Date();
             const diff = now - startDate;
-            
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            document.getElementById("uptime").textContent = 
-                `${days} hari, ${Math.floor(hours)} jam, ${minutes} minit, ${seconds} saat`;
+            document.getElementById("uptime").textContent = `${days} Hari, ${hours} Jam, ${minutes} Minit, ${seconds} Saat`;
         }
-        
-        // Update uptime setiap detik
         setInterval(updateUptime, 1000);
-        updateUptime(); // Panggil pertama kali
-        
-        // Fungsi untuk menangani klik tombol semak
-        document.getElementById("semak").addEventListener("click", function() {
-            const nama = document.getElementById("nama").value.trim();
-            const kelas = document.getElementById("kelas").value;
-            const errorMessage = document.getElementById("error-message");
-            const resultContainer = document.getElementById("result-container");
-            
-            // Sembunyikan pesan error dan hasil sebelumnya
-            errorMessage.style.display = "none";
-            resultContainer.style.display = "none";
-            
-            // Validasi input
-            if (!nama || !kelas) {
-                errorMessage.textContent = "Sila masukkan nama dan pilih tahun kelas.";
-                errorMessage.style.display = "block";
+        updateUptime();
+
+        async function initData() {
+            const status = document.getElementById('syncStatus');
+            try {
+                const response = await fetch(SHEET_CSV);
+                const csvText = await response.text();
+                const lines = csvText.split('\n');
+                muridData = lines.slice(1).map(line => {
+                    const kolum = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    return {
+                        nama: kolum[0]?.replace(/"/g, '').trim() || '',
+                        tahun: kolum[1]?.replace(/"/g, '').trim() || '',
+                        email: kolum[2]?.replace(/"/g, '').trim() || '',
+                        pass: kolum[3]?.replace(/"/g, '').trim() || ''
+                    };
+                });
+                status.innerHTML = "🟢 SERVER DATA DISAMBUNGKAN";
+                status.className = "mt-4 text-center text-[9px] text-emerald-600 font-black tracking-widest uppercase";
+            } catch (error) {
+                status.innerHTML = "🔴 RALAT SAMBUNGAN DATABASE";
+                status.className = "mt-4 text-center text-[9px] text-rose-600 font-black tracking-widest uppercase";
+            }
+        }
+
+        function cariMurid() {
+            const sNama = document.getElementById('searchNama').value.toLowerCase();
+            const sTahun = document.getElementById('searchKelas').value;
+            const matchContainer = document.getElementById('matchContainer');
+            const matchList = document.getElementById('matchList');
+            const resArea = document.getElementById('resultArea');
+
+            if (!sNama || !sTahun) {
+                alert('Sila masukkan NAMA dan pilih TAHUN murid.');
                 return;
             }
-            
-            // Cari data yang sesuai
-            const kelasData = data[kelas];
-            const searchTerm = nama.toLowerCase();
-            
-            // Cari nama yang mengandungi kata kunci carian
-            const found = kelasData.find(item => 
-                item.nama.toLowerCase().includes(searchTerm));
-            
-            if (found) {
-                // Tampilkan hasil
-                document.getElementById("result-nama").textContent = found.nama;
-                document.getElementById("result-kelas").textContent = "Tahun " + kelas;
-                document.getElementById("result-id").textContent = found.id;
-                document.getElementById("result-password").textContent = found.password;
-                resultContainer.style.display = "block";
+
+            const matches = muridData.filter(m => 
+                m.nama.toLowerCase().includes(sNama) && m.tahun.startsWith(sTahun)
+            );
+
+            matchList.innerHTML = '';
+            resArea.classList.add('hidden');
+
+            if (matches.length > 0) {
+                matchContainer.classList.remove('hidden');
+                matches.forEach(murid => {
+                    const div = document.createElement('div');
+                    div.className = 'match-item p-4 border-b last:border-0 transition-all uppercase';
+                    div.innerText = murid.nama;
+                    div.onclick = () => paparkanMaklumat(murid);
+                    matchList.appendChild(div);
+                });
+                if(matches.length === 1) paparkanMaklumat(matches[0]);
             } else {
-                // Tampilkan pesan error
-                errorMessage.textContent = "Maaf, maklumat tidak dijumpai. Sila pastikan nama dan tahun yang dimasukkan adalah betul.";
-                errorMessage.style.display = "block";
+                matchContainer.classList.add('hidden');
+                alert('Murid tidak dijumpai. Sila semak Tahun dan Ejaan.');
             }
-        });
+        }
+
+        function paparkanMaklumat(murid) {
+            document.getElementById('resNama').textContent = murid.nama;
+            document.getElementById('resKelas').textContent = murid.tahun;
+            document.getElementById('resEmail').textContent = murid.email;
+            document.getElementById('resPass').textContent = murid.pass;
+            document.getElementById('cardNama').textContent = murid.nama;
+            document.getElementById('cardTahun').textContent = murid.tahun;
+            document.getElementById('cardEmail').textContent = murid.email;
+            document.getElementById('cardPass').textContent = murid.pass;
+            document.getElementById('resultArea').classList.remove('hidden');
+            document.getElementById('matchContainer').classList.add('hidden');
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadIDCard() {
+            const template = document.getElementById('id-card-template');
+            const namaMurid = document.getElementById('cardNama').textContent;
+            html2canvas(template, { scale: 2, backgroundColor: null }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `ID_DELIMA_SKKM_${namaMurid}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+        
+        function loginAdmin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+            
+            if(user === "Admin" && pass === "SIDM9207") {
+                window.open(EDIT_URL, '_blank');
+                closeAdminModal();
+            } else {
+                alert("Username atau Password Salah!");
+            }
+        }
+
+        initData();
     </script>
 </body>
 </html>
