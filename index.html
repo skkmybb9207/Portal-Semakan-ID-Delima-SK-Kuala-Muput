@@ -11,6 +11,7 @@
         body { 
             font-family: 'Inter', sans-serif; 
             background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #dc2626 100%);
+            background-attachment: fixed;
         }
         .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
@@ -23,7 +24,6 @@
         }
         .match-item:hover { background-color: #fff1f2; cursor: pointer; color: #e11d48; }
         
-        /* Modal Style */
         #adminModal { display: none; }
     </style>
 </head>
@@ -37,12 +37,11 @@
             <div class="text-center z-10">
                 <h1 class="text-2xl font-black text-rose-900 tracking-tighter uppercase leading-tight">Portal ID Delima</h1>
                 <p class="text-rose-600 font-extrabold text-lg tracking-tight uppercase">SK Kuala Muput, Tatau</p>
-                <p class="text-slate-500 font-bold italic text-[10px] mt-1 tracking-widest uppercase">Transformasi Sekolah 2025 (TS25)</p>
+                <p class="text-slate-500 font-bold italic text-[10px] mt-1 tracking-widest uppercase text-center">Transformasi Sekolah 2025 (TS25)</p>
             </div>
 
             <div class="flex items-center gap-4 z-10">
                 <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-16" alt="Logo TS25">
-                <!-- Button Admin -->
                 <button onclick="openAdminModal()" class="bg-rose-100 hover:bg-rose-200 p-3 rounded-full text-rose-600 transition-all shadow-inner" title="Panel Admin">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -55,13 +54,13 @@
             <!-- Form Semakan -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="glass p-6 rounded-3xl card-shadow border border-white/20">
-                    <h2 class="text-lg font-black text-rose-800 mb-4 flex items-center gap-2 border-b border-rose-100 pb-2">
-                        <span>🔍</span> CARIAN PINTAR
+                    <h2 class="text-lg font-black text-rose-800 mb-4 flex items-center gap-2 border-b border-rose-100 pb-2 uppercase tracking-tighter">
+                        <span>🔍</span> Carian Pintar
                     </h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Nama Murid (Cth: Siti / Andrew):</label>
-                            <input type="text" id="searchNama" placeholder="MASUKKAN NAMA..." class="w-full p-4 bg-white border-2 border-rose-50 rounded-2xl focus:ring-4 focus:ring-rose-200 focus:outline-none transition-all font-bold uppercase text-sm shadow-sm">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Nama Murid:</label>
+                            <input type="text" id="searchNama" placeholder="TAIP NAMA DI SINI..." class="w-full p-4 bg-white border-2 border-rose-50 rounded-2xl focus:ring-4 focus:ring-rose-200 focus:outline-none transition-all font-bold uppercase text-sm shadow-sm">
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Tahun / Kelas:</label>
@@ -75,25 +74,25 @@
                                 <option value="6">Tahun 6</option>
                             </select>
                         </div>
-                        <button onclick="cariMurid()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">Cari Murid</button>
+                        <button onclick="cariMurid()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">Mula Mencari</button>
                     </div>
 
-                    <!-- Senarai Nama Dijumpai -->
-                    <div id="matchContainer" class="hidden mt-6 animate-bounce">
-                        <p class="text-[10px] font-black text-rose-500 mb-2 uppercase tracking-widest text-center">Pilih nama di bawah:</p>
+                    <!-- Match Container (Bounce Dibuang) -->
+                    <div id="matchContainer" class="hidden mt-6">
+                        <p class="text-[10px] font-black text-rose-500 mb-2 uppercase tracking-widest text-center">Pilih nama yang betul:</p>
                         <div id="matchList" class="border-2 border-rose-100 rounded-2xl overflow-hidden divide-y divide-rose-50 bg-white text-sm font-bold shadow-xl">
                             <!-- Nama akan muncul di sini -->
                         </div>
                     </div>
 
-                    <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic tracking-tighter">Checking Data Connection...</div>
+                    <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic tracking-tighter uppercase">Checking Data...</div>
                 </div>
             </div>
 
             <!-- Area Keputusan -->
             <div id="resultArea" class="lg:col-span-3 hidden">
                 <div class="glass p-6 rounded-3xl card-shadow border-l-[12px] border-rose-500 h-full">
-                    <h2 class="text-xl font-black text-rose-800 mb-6 flex items-center gap-2 uppercase tracking-tight">
+                    <h2 class="text-xl font-black text-rose-800 mb-6 flex items-center gap-2 uppercase tracking-tight italic">
                         <span>📄</span> Maklumat Murid
                     </h2>
                     <div class="grid grid-cols-1 gap-4">
@@ -106,12 +105,12 @@
                             <p id="resKelas" class="font-black text-pink-600 text-lg uppercase">-</p>
                         </div>
                         <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 shadow-sm">
-                            <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest">ID Delima (Email)</p>
+                            <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest font-black">Email Delima</p>
                             <p id="resEmail" class="font-mono text-sm font-black text-rose-900 break-all">-</p>
                         </div>
-                        <div class="bg-slate-900 p-4 rounded-2xl shadow-xl">
+                        <div class="bg-slate-900 p-5 rounded-2xl shadow-xl border-t-4 border-yellow-400">
                             <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Kata Laluan</p>
-                            <p id="resPass" class="font-mono text-xl font-black text-yellow-400 tracking-wider">-</p>
+                            <p id="resPass" class="font-mono text-2xl font-black text-yellow-400 tracking-wider">-</p>
                         </div>
                     </div>
                     <button onclick="downloadIDCard()" class="mt-8 w-full bg-slate-800 hover:bg-black text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 uppercase tracking-widest">
@@ -138,19 +137,15 @@
 
         <!-- Footer -->
         <footer class="mt-12 border-t border-white/20 pt-8 text-center space-y-4">
-            <div class="text-white text-sm font-black uppercase tracking-[0.2em] drop-shadow-md">
-                SK Kuala Muput © 2025
-            </div>
-            <div class="bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-md text-white text-[11px] font-bold border border-white/30 uppercase tracking-widest">
-                Inovasi: Cikgu Dayangku Nurul Akmal Awang Mustapha
-            </div>
+            <div class="text-white text-sm font-black uppercase tracking-[0.2em] drop-shadow-md">SK Kuala Muput © 2025</div>
+            <div class="bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-md text-white text-[11px] font-bold border border-white/30 uppercase tracking-widest">Inovasi: Cikgu Dayangku Nurul Akmal Awang Mustapha</div>
             <div class="text-rose-100 text-[10px] font-black italic tracking-widest uppercase">
-                Sistem beroperasi: <span id="uptime" class="text-white not-italic underline decoration-rose-400 underline-offset-4"></span>
+                Beroperasi: <span id="uptime" class="text-white not-italic underline decoration-rose-400 underline-offset-4"></span>
             </div>
         </footer>
     </div>
 
-    <!-- Template Kad (Ghaib) -->
+    <!-- Template Kad ID (Sesi Dibuang) -->
     <div id="id-card-template">
         <div class="flex justify-between items-start border-b border-white/30 pb-4 mb-4">
             <div><p class="text-[10px] font-bold tracking-widest uppercase opacity-80">Kad Akses Digital Murid</p>
@@ -172,15 +167,15 @@
             </div>
         </div>
         <div class="absolute bottom-4 left-6 right-6 flex justify-between items-center text-[9px] font-bold tracking-widest opacity-60 border-t border-white/20 pt-2">
-            <p>KELAS: <span id="cardTahun"></span> | SESI 2025/2026</p>
+            <p>KELAS: <span id="cardTahun"></span></p>
             <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-7">
         </div>
     </div>
 
     <script>
-        // --- KONFIGURASI DATA ---
+        // --- KONFIGURASI ---
         const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-GJIxduKS2_GeCDwAkeMEoa7S9q3D8BbZCOMeJ1cGz89f5jCSdXLAZJAzelbAd2EfhOmdz9K-0SHN/pub?output=csv';
-        const EDIT_URL = 'https://docs.google.com/spreadsheets/d/1vQ-GJIxduKS2_GeCDwAkeMEoa7S9q3D8BbZCOMeJ1cGz89f5jCSdXLAZJAzelbAd2EfhOmdz9K-0SHN/edit';
+        const EDIT_URL = 'https://docs.google.com/spreadsheets/d/1Lw1AGFZsSqBx3GEmG5_gy52X_11E5UibRtWcY05eHEE/edit?usp=sharing';
 
         let muridData = [];
 
@@ -212,29 +207,31 @@
                         pass: kolum[3]?.replace(/"/g, '').trim() || ''
                     };
                 });
-                status.innerHTML = "🟢 SERVER DATA DISAMBUNGKAN";
-                status.className = "mt-4 text-center text-[9px] text-emerald-600 font-black tracking-widest uppercase";
+                status.innerHTML = "🟢 SERVER DATA CONNECTED";
             } catch (error) {
-                status.innerHTML = "🔴 RALAT SAMBUNGAN DATABASE";
-                status.className = "mt-4 text-center text-[9px] text-rose-600 font-black tracking-widest uppercase";
+                status.innerHTML = "🔴 DATABASE ERROR";
             }
         }
 
         function cariMurid() {
-            const sNama = document.getElementById('searchNama').value.toLowerCase();
+            const sNama = document.getElementById('searchNama').value.toLowerCase().trim();
             const sTahun = document.getElementById('searchKelas').value;
             const matchContainer = document.getElementById('matchContainer');
             const matchList = document.getElementById('matchList');
             const resArea = document.getElementById('resultArea');
 
             if (!sNama || !sTahun) {
-                alert('Sila masukkan NAMA dan pilih TAHUN murid.');
+                alert('Sila taip NAMA dan pilih TAHUN murid.');
                 return;
             }
 
-            const matches = muridData.filter(m => 
-                m.nama.toLowerCase().includes(sNama) && m.tahun.startsWith(sTahun)
-            );
+            // FILTER: Mengabaikan perkataan 'anak' semasa carian supaya 'ana' lebih tepat
+            const matches = muridData.filter(m => {
+                const namaPenuh = m.nama.toLowerCase();
+                const namaTanpaAnak = namaPenuh.replace(/\banak\b/g, '').replace(/\ba\/k\b/g, '');
+                
+                return namaTanpaAnak.includes(sNama) && m.tahun.startsWith(sTahun);
+            });
 
             matchList.innerHTML = '';
             resArea.classList.add('hidden');
@@ -251,7 +248,7 @@
                 if(matches.length === 1) paparkanMaklumat(matches[0]);
             } else {
                 matchContainer.classList.add('hidden');
-                alert('Murid tidak dijumpai. Sila semak Tahun dan Ejaan.');
+                alert('Murid tidak dijumpai. Cuba taip nama yang lebih spesifik.');
             }
         }
 
@@ -280,20 +277,16 @@
             });
         }
 
-        // --- ADMIN FUNCTIONS ---
         function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
         
         function loginAdmin() {
             const user = document.getElementById('adminUser').value;
             const pass = document.getElementById('adminPass').value;
-            
             if(user === "Admin" && pass === "SIDM9207") {
                 window.open(EDIT_URL, '_blank');
                 closeAdminModal();
-            } else {
-                alert("Username atau Password Salah!");
-            }
+            } else { alert("Username atau Password Salah!"); }
         }
 
         initData();
