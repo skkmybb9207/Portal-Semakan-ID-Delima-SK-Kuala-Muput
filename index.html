@@ -6,12 +6,18 @@
     <title>Sistem ID Delima - SK Kuala Muput</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Import Font Dekoratif (Righteous) & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
             background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #dc2626 100%);
             background-attachment: fixed;
+        }
+        /* Style khas untuk font dekoratif */
+        .font-decorative { 
+            font-family: 'Righteous', cursive;
+            text-shadow: 2px 4px 10px rgba(225, 29, 72, 0.3);
         }
         .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
@@ -23,7 +29,6 @@
             position: absolute; left: -9999px;
         }
         .match-item:hover { background-color: #fff1f2; cursor: pointer; color: #e11d48; }
-        
         #adminModal { display: none; }
     </style>
 </head>
@@ -35,7 +40,10 @@
             <img src="https://i.postimg.cc/fLF8Qqnw/LOGO-SKKM-2023-LATEST.png" class="h-20 mb-4 md:mb-0 z-10" alt="Logo SKKM">
             
             <div class="text-center z-10">
-                <h1 class="text-2xl font-black text-rose-900 tracking-tighter uppercase leading-tight">Portal ID Delima</h1>
+                <!-- Tajuk dengan Font Dekoratif -->
+                <h1 class="font-decorative text-3xl md:text-4xl text-rose-900 tracking-normal uppercase leading-tight">
+                    Portal ID Delima
+                </h1>
                 <p class="text-rose-600 font-extrabold text-lg tracking-tight uppercase">SK Kuala Muput, Tatau</p>
                 <p class="text-slate-500 font-bold italic text-[10px] mt-1 tracking-widest uppercase text-center">Transformasi Sekolah 2025 (TS25)</p>
             </div>
@@ -77,7 +85,7 @@
                         <button onclick="cariMurid()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">Mula Mencari</button>
                     </div>
 
-                    <!-- Match Container (Bounce Dibuang) -->
+                    <!-- Match Container -->
                     <div id="matchContainer" class="hidden mt-6">
                         <p class="text-[10px] font-black text-rose-500 mb-2 uppercase tracking-widest text-center">Pilih nama yang betul:</p>
                         <div id="matchList" class="border-2 border-rose-100 rounded-2xl overflow-hidden divide-y divide-rose-50 bg-white text-sm font-bold shadow-xl">
@@ -85,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic tracking-tighter uppercase">Checking Data...</div>
+                    <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic tracking-tighter uppercase">Menghubungkan Database...</div>
                 </div>
             </div>
 
@@ -105,7 +113,7 @@
                             <p id="resKelas" class="font-black text-pink-600 text-lg uppercase">-</p>
                         </div>
                         <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 shadow-sm">
-                            <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest font-black">Email Delima</p>
+                            <p class="text-[10px] font-black text-rose-400 uppercase tracking-widest font-black text-xs">ID Delima (Email)</p>
                             <p id="resEmail" class="font-mono text-sm font-black text-rose-900 break-all">-</p>
                         </div>
                         <div class="bg-slate-900 p-5 rounded-2xl shadow-xl border-t-4 border-yellow-400">
@@ -113,8 +121,8 @@
                             <p id="resPass" class="font-mono text-2xl font-black text-yellow-400 tracking-wider">-</p>
                         </div>
                     </div>
-                    <button onclick="downloadIDCard()" class="mt-8 w-full bg-slate-800 hover:bg-black text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 uppercase tracking-widest">
-                        <span>💾</span> Simpan Kad ID (PNG)
+                    <button onclick="downloadIDCard()" class="mt-8 w-full bg-slate-800 hover:bg-black text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 uppercase tracking-widest font-decorative">
+                        💾 Simpan Kad ID
                     </button>
                 </div>
             </div>
@@ -123,7 +131,7 @@
         <!-- Admin Login Modal -->
         <div id="adminModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="glass p-8 rounded-3xl card-shadow max-w-sm w-full border-t-8 border-rose-600">
-                <h3 class="text-xl font-black text-rose-900 mb-4 uppercase text-center">Panel Admin</h3>
+                <h3 class="font-decorative text-xl text-rose-900 mb-4 uppercase text-center tracking-wider text-2xl">Panel Admin</h3>
                 <div class="space-y-4">
                     <input type="text" id="adminUser" placeholder="Username" class="w-full p-4 bg-white border-2 border-rose-100 rounded-xl focus:outline-none font-bold">
                     <input type="password" id="adminPass" placeholder="Password" class="w-full p-4 bg-white border-2 border-rose-100 rounded-xl focus:outline-none font-bold">
@@ -145,7 +153,7 @@
         </footer>
     </div>
 
-    <!-- Template Kad ID (Sesi Dibuang) -->
+    <!-- Template Kad ID -->
     <div id="id-card-template">
         <div class="flex justify-between items-start border-b border-white/30 pb-4 mb-4">
             <div><p class="text-[10px] font-bold tracking-widest uppercase opacity-80">Kad Akses Digital Murid</p>
@@ -225,11 +233,9 @@
                 return;
             }
 
-            // FILTER: Mengabaikan perkataan 'anak' semasa carian supaya 'ana' lebih tepat
             const matches = muridData.filter(m => {
                 const namaPenuh = m.nama.toLowerCase();
                 const namaTanpaAnak = namaPenuh.replace(/\banak\b/g, '').replace(/\ba\/k\b/g, '');
-                
                 return namaTanpaAnak.includes(sNama) && m.tahun.startsWith(sTahun);
             });
 
