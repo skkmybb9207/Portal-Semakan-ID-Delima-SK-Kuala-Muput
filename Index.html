@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem ID Delima - SK Kuala Muput</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/LXFr6PXw/sistem-id-delima-murid.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/LXFr6PXw/sistem-id-delima-murid.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #dc2626 100%);
+            background-attachment: fixed;
+        }
+        .font-decorative { 
+            font-family: 'Righteous', cursive;
+            text-shadow: 2px 4px 10px rgba(225, 29, 72, 0.3);
+        }
+        .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        
+        #id-card-template {
+            width: 500px; height: 300px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white; padding: 25px; border-radius: 15px;
+            position: absolute; left: -9999px;
+        }
+        .match-item:hover { background-color: #fff1f2; cursor: pointer; color: #e11d48; }
+        
+        /* Skrin Kata Laluan */
+        #portalAccessOverlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: linear-gradient(135deg, #f43f5e 0%, #dc2626 100%);
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-12">
+
+    <!-- OVERLAY KATA LALUAN -->
+    <div id="portalAccessOverlay">
+        <div class="glass p-8 rounded-3xl card-shadow max-w-sm w-full border-t-8 border-white text-center">
+            <img src="https://i.postimg.cc/1RvV6rQg/logo-sekolah-3d.png" class="h-24 mx-auto mb-6 drop-shadow-lg">
+            <h2 class="font-decorative text-2xl text-rose-900 mb-2 uppercase">Akses Terhad</h2>
+            <p class="text-slate-500 text-sm font-bold mb-6 uppercase tracking-tighter">Sila masukkan kata laluan staf.</p>
+            <input type="password" id="staffPassInput" placeholder="KATA LALUAN" class="w-full p-4 bg-white border-2 border-rose-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-rose-200 text-center font-black tracking-widest mb-4 shadow-inner">
+            <button onclick="verifyPortalAccess()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 uppercase tracking-widest">Buka Portal</button>
+            <p id="errorMsg" class="text-rose-600 text-[10px] font-black mt-4 uppercase hidden">❌ Kata laluan salah!</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (Mula-mula hidden) -->
+    <div id="mainPortalContent" class="hidden">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+            <header class="glass rounded-3xl p-6 mb-8 card-shadow flex flex-col md:flex-row items-center justify-between border-b-4 border-rose-600 relative overflow-hidden">
+                <img src="https://i.postimg.cc/1RvV6rQg/logo-sekolah-3d.png" class="h-20 mb-4 md:mb-0 z-10" alt="Logo SKKM">
+                <div class="text-center z-10">
+                    <h1 class="font-decorative text-3xl md:text-4xl text-rose-900 tracking-normal uppercase leading-tight">Portal ID Delima</h1>
+                    <p class="text-rose-600 font-extrabold text-lg tracking-tight uppercase">SK Kuala Muput, Tatau</p>
+                    <p class="text-slate-500 font-bold italic text-[10px] mt-1 tracking-widest uppercase text-center">Transformasi Sekolah 2025 (TS25)</p>
+                </div>
+                <div class="flex items-center gap-4 z-10">
+                    <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-16" alt="Logo TS25">
+                    <button onclick="openAdminModal()" class="bg-rose-100 hover:bg-rose-200 p-3 rounded-full text-rose-600 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <!-- Form Carian -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="glass p-6 rounded-3xl card-shadow">
+                        <h2 class="text-lg font-black text-rose-800 mb-4 flex items-center gap-2 border-b border-rose-100 pb-2 uppercase tracking-tighter"><span>🔍</span> Carian Pintar</h2>
+                        <div class="space-y-4">
+                            <input type="text" id="searchNama" placeholder="TAIP NAMA DI SINI..." class="w-full p-4 border-2 border-rose-50 rounded-2xl focus:outline-none font-bold uppercase text-sm shadow-sm">
+                            <select id="searchKelas" class="w-full p-4 border-2 border-rose-50 rounded-2xl font-bold text-sm shadow-sm">
+                                <option value="">-- PILIH TAHUN --</option>
+                                <option value="1">Tahun 1</option><option value="2">Tahun 2</option><option value="3">Tahun 3</option>
+                                <option value="4">Tahun 4</option><option value="5">Tahun 5</option><option value="6">Tahun 6</option>
+                            </select>
+                            <button onclick="cariMurid()" class="w-full bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all">Mula Mencari</button>
+                        </div>
+                        <div id="matchContainer" class="hidden mt-6">
+                            <div id="matchList" class="border-2 border-rose-100 rounded-2xl overflow-hidden divide-y divide-rose-50 bg-white text-sm font-bold shadow-xl"></div>
+                        </div>
+                        <div id="syncStatus" class="mt-4 text-center text-[10px] text-slate-400 font-bold italic uppercase tracking-widest">Menghubungkan Database...</div>
+                    </div>
+                </div>
+
+                <!-- Hasil Carian -->
+                <div id="resultArea" class="lg:col-span-3 hidden">
+                    <div class="glass p-6 rounded-3xl card-shadow border-l-[12px] border-rose-500">
+                        <h2 class="text-xl font-black text-rose-800 mb-6 uppercase italic">📄 Maklumat Murid</h2>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="bg-white/50 p-4 rounded-2xl border border-rose-100 shadow-sm">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Nama Penuh</p>
+                                <p id="resNama" class="text-lg font-black text-rose-900 uppercase leading-tight">-</p>
+                            </div>
+                            <div class="bg-white/50 p-4 rounded-2xl border border-rose-100 shadow-sm">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Kelas / Tahun</p>
+                                <p id="resKelas" class="font-black text-pink-600 text-lg uppercase">-</p>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 shadow-sm">
+                                <p class="text-[10px] font-bold text-rose-400 uppercase">ID Delima (Email)</p>
+                                <p id="resEmail" class="font-mono text-sm font-black text-rose-900 break-all">-</p>
+                            </div>
+                            <div class="bg-slate-900 p-5 rounded-2xl shadow-xl border-t-4 border-yellow-400">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase">Kata Laluan</p>
+                                <p id="resPass" class="font-mono text-2xl font-black text-yellow-400 tracking-wider">-</p>
+                            </div>
+                        </div>
+                        <button onclick="downloadIDCard()" class="mt-8 w-full bg-slate-800 text-white font-black py-5 rounded-2xl shadow-xl font-decorative uppercase tracking-widest">💾 Simpan Kad ID</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-12 border-t border-white/20 pt-8 text-center space-y-4">
+                <div class="text-white text-sm font-black uppercase tracking-[0.2em] drop-shadow-md">SK Kuala Muput © 2025</div>
+                <div class="bg-white/20 inline-block px-6 py-2 rounded-full backdrop-blur-md text-white text-[11px] font-bold border border-white/30 uppercase tracking-widest">Inovasi: Cikgu Dayangku Nurul Akmal Awang Mustapha</div>
+                <div class="text-white text-[10px] font-bold uppercase tracking-widest">
+                    Dibangunkan pada: 12 Julai 2025
+                </div>
+                <div class="text-rose-100 text-[10px] font-black italic tracking-widest uppercase">
+                    Beroperasi: <span id="uptime" class="text-white not-italic underline decoration-rose-400 underline-offset-4"></span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass p-8 rounded-3xl max-w-sm w-full border-t-8 border-rose-600">
+            <h3 class="font-decorative text-xl text-rose-900 mb-4 uppercase text-center">Panel Admin</h3>
+            <div class="space-y-4">
+                <input type="text" id="adminUser" placeholder="Username" class="w-full p-4 border-2 border-rose-100 rounded-xl font-bold">
+                <input type="password" id="adminPass" placeholder="Password" class="w-full p-4 border-2 border-rose-100 rounded-xl font-bold">
+                <div class="flex gap-2">
+                    <button onclick="closeAdminModal()" class="flex-1 bg-slate-200 font-bold py-3 rounded-xl uppercase">Batal</button>
+                    <button onclick="loginAdmin()" class="flex-1 bg-rose-600 text-white font-bold py-3 rounded-xl uppercase shadow-lg">Masuk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Kad ID (Hidden) -->
+    <div id="id-card-template">
+        <div class="flex justify-between items-start border-b border-white/30 pb-4 mb-4">
+            <div><p class="text-[10px] font-bold uppercase opacity-80">Kad Akses Digital Murid</p><h2 class="text-xl font-black italic">SK KUALA MUPUT</h2></div>
+            <img src="https://i.postimg.cc/1RvV6rQg/logo-sekolah-3d.png" class="h-12">
+        </div>
+        <div class="space-y-4">
+            <div><p class="text-[10px] uppercase font-black mb-1">Nama Penuh Murid:</p><p id="cardNama" class="text-lg font-black uppercase leading-tight">-</p></div>
+            <div class="flex justify-between gap-4">
+                <div class="flex-1 bg-white/10 p-3 rounded-lg border border-white/10"><p class="text-[9px] uppercase mb-1 font-bold">Email Delima:</p><p id="cardEmail" class="font-mono text-[11px] font-bold break-all">-</p></div>
+                <div class="w-32 bg-white/10 p-3 rounded-lg border-l-4 border-yellow-400"><p class="text-[9px] uppercase mb-1 font-bold">Katalaluan:</p><p id="cardPass" class="font-mono text-xs font-bold text-yellow-300">-</p></div>
+            </div>
+        </div>
+        <div class="absolute bottom-4 left-6 right-6 flex justify-between items-center text-[9px] font-bold border-t border-white/20 pt-2">
+            <p>KELAS: <span id="cardTahun"></span></p>
+            <img src="https://i.postimg.cc/44zM39RV/ts25-program-transformasi-sekolah-2025-seeklogo.png" class="h-7">
+        </div>
+    </div>
+
+    <script>
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-GJIxduKS2_GeCDwAkeMEoa7S9q3D8BbZCOMeJ1cGz89f5jCSdXLAZJAzelbAd2EfhOmdz9K-0SHN/pub?output=csv';
+        const EDIT_URL = 'https://docs.google.com/spreadsheets/d/1Lw1AGFZsSqBx3GEmG5_gy52X_11E5UibRtWcY05eHEE/edit?usp=sharing';
+        let muridData = [];
+
+        // 1. UPTIME SYSTEM
+        function updateUptime() {
+            const startDate = new Date("2025-07-12T00:00:00");
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const uptimeElem = document.getElementById("uptime");
+            if(uptimeElem) uptimeElem.textContent = `${days} Hari, ${hours} Jam, ${minutes} Minit, ${seconds} Saat`;
+        }
+        setInterval(updateUptime, 1000);
+        updateUptime();
+
+        // 2. DATA SYSTEM (Load immediately)
+        async function initData() {
+            try {
+                const response = await fetch(SHEET_CSV);
+                const csvText = await response.text();
+                const lines = csvText.split('\n');
+                muridData = lines.slice(1).map(line => {
+                    const kolum = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    return {
+                        nama: (kolum[0] || '').replace(/"/g, '').trim(),
+                        tahun: (kolum[1] || '').replace(/"/g, '').trim(),
+                        email: (kolum[2] || '').replace(/"/g, '').trim(),
+                        pass: (kolum[3] || '').replace(/"/g, '').trim()
+                    };
+                });
+                document.getElementById('syncStatus').innerHTML = "🟢 SERVER DATA READY";
+            } catch (error) {
+                document.getElementById('syncStatus').innerHTML = "🔴 DATABASE ERROR (HOSTING REQUIRED)";
+            }
+        }
+        initData();
+
+        // 3. VERIFIKASI AKSES
+        function verifyPortalAccess() {
+            const pass = document.getElementById('staffPassInput').value.trim();
+            if(pass === "STAFF9207") {
+                document.getElementById('portalAccessOverlay').style.display = 'none';
+                document.getElementById('mainPortalContent').classList.remove('hidden');
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+            }
+        }
+
+        // 4. CARIAN MURID (Word boundary search to avoid "Anak" conflict)
+        function cariMurid() {
+            const sNama = document.getElementById('searchNama').value.toLowerCase().trim();
+            const sTahun = document.getElementById('searchKelas').value;
+            const matchContainer = document.getElementById('matchContainer');
+            const matchList = document.getElementById('matchList');
+            const resArea = document.getElementById('resultArea');
+
+            if (!sNama || !sTahun) { alert('Sila taip NAMA dan pilih TAHUN.'); return; }
+
+            const matches = muridData.filter(m => {
+                const namaAsal = m.nama.toLowerCase();
+                // Buang "anak" dan "a/k" untuk perbandingan tepat
+                const namaBersih = namaAsal.replace(/\banak\b/gi, '').replace(/\ba\/k\b/gi, '').trim();
+                const kataDalamNama = namaBersih.split(/\s+/); 
+                
+                // Cari jika ada perkataan bermula dengan input (Ana vs Anak fixed)
+                const matchNama = kataDalamNama.some(kata => kata.startsWith(sNama));
+                const matchTahun = m.tahun.includes(sTahun);
+                return matchNama && matchTahun;
+            });
+
+            matchList.innerHTML = '';
+            resArea.classList.add('hidden');
+
+            if (matches.length > 0) {
+                matchContainer.classList.remove('hidden');
+                matches.forEach(murid => {
+                    const div = document.createElement('div');
+                    div.className = 'match-item p-4 border-b last:border-0 transition-all uppercase';
+                    div.innerText = murid.nama;
+                    div.onclick = () => paparkanMaklumat(murid);
+                    matchList.appendChild(div);
+                });
+                if(matches.length === 1) paparkanMaklumat(matches[0]);
+            } else {
+                matchContainer.classList.add('hidden');
+                alert('Nama tidak dijumpai dalam Tahun ' + sTahun);
+            }
+        }
+
+        function paparkanMaklumat(m) {
+            document.getElementById('resNama').textContent = m.nama;
+            document.getElementById('resKelas').textContent = m.tahun;
+            document.getElementById('resEmail').textContent = m.email;
+            document.getElementById('resPass').textContent = m.pass;
+            document.getElementById('cardNama').textContent = m.nama;
+            document.getElementById('cardTahun').textContent = m.tahun;
+            document.getElementById('cardEmail').textContent = m.email;
+            document.getElementById('cardPass').textContent = m.pass;
+            document.getElementById('resultArea').classList.remove('hidden');
+            document.getElementById('matchContainer').classList.add('hidden');
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadIDCard() {
+            const template = document.getElementById('id-card-template');
+            const namaMurid = document.getElementById('cardNama').textContent;
+            html2canvas(template, { scale: 2, backgroundColor: null }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `ID_DELIMA_${namaMurid}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+        function loginAdmin() {
+            const u = document.getElementById('adminUser').value;
+            const p = document.getElementById('adminPass').value;
+            if(u === "Admin" && p === "eDelima9207") { window.open(EDIT_URL, '_blank'); closeAdminModal(); } 
+            else { alert("Salah!"); }
+        }
+    </script>
+</body>
+</html>
